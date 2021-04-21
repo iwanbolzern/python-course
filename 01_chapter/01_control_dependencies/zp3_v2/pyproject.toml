@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "zp3"
-version = "1.0.0"
+version = "2.0.0"
 description = "Example Package for Zühlke Python Course"
 authors = ["Iwan Silvan Bolzern <iwan.bolzern@bluewin.ch>"]
 classifiers = [
