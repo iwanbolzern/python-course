@@ -1,5 +1,6 @@
 [tool.poetry]
 name = "zp2"
+version = "1.0.0"
 description = "Example Package for Zühlke Python Course"
 authors = ["Iwan Silvan Bolzern <iwan.bolzern@bluewin.ch>"]
 classifiers = [
@@ -21,7 +22,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
-zp3 = "^2.0.0"
+zp3 = "^2"
 
 [tool.poetry.dev-dependencies]
 
