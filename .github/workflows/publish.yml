@@ -22,5 +22,7 @@ jobs:
       run: |
         cd 01_chapter/01_control_dependencies/zp3_v1
         poetry publish --build -u ${PYPI_USERNAME} -p ${PYPI_PASSWORD}
+        cd ../../../
         cd 01_chapter/01_control_dependencies/zp3_v2
         poetry publish --build -u ${PYPI_USERNAME} -p ${PYPI_PASSWORD}
+        cd ../../../
