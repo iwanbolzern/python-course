@@ -22,4 +22,5 @@ jobs:
         BUILD_NR: ${{ github.run_number }}
       run: |
         cd 01_chapter/01_control_dependencies
+        chmod +x deploy.sh
         ./deploy.sh
