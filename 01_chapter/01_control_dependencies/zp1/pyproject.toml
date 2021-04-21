@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "zp1"
+version = "1.0.0"
+description = "Example Package for Zühlke Python Course"
+authors = ["Iwan Silvan Bolzern <iwan.bolzern@bluewin.ch>"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+packages = [
+    { include = "__init__.py" },
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.6"
+zp3 = "^1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
