@@ -1,0 +1,18 @@
+[[package]]
+name = "zp3"
+version = "2.0.0.6"
+description = "Example Package for Zühlke Python Course"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.6"
+content-hash = "9df010c5905a716e49c4b2da0ddcb66182b195bc81cd6174090b0dbd5195c69f"
+
+[metadata.files]
+zp3 = [
+    {file = "zp3-2.0.0.6-py3-none-any.whl", hash = "sha256:5ea641e512f1e06b174d6392aaabe5c343f09d20bb3f1a57218f9b4df73c192d"},
+    {file = "zp3-2.0.0.6.tar.gz", hash = "sha256:b7fd9595d5cb5035e053424c47189dacf68ebf8d4a41915f660a1b03e0bb5e46"},
+]

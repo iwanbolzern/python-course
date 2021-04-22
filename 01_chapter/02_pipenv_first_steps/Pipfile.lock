@@ -1,0 +1,29 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "e8a7932e7a79103f0f7ee18159e975560237eee3a1d2d317d762d20e129f4e89"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.9"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "freegames": {
+            "hashes": [
+                "sha256:1ebe3681e858613ec6c6cb57b6825de99a8bd909856f6c00c76bf8c6eb1ecc10",
+                "sha256:351da8f57f9244a83afe1f3bdd3cb9199c5f46e70f655928f242a75c8c52f00e"
+            ],
+            "index": "pypi",
+            "version": "==2.3.2"
+        }
+    },
+    "develop": {}
+}
