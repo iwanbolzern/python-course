@@ -1,12 +1,10 @@
-import concurrent.futures
 import os
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
 import requests
-import threading
-import time
-
 
 thread_local = threading.local()
 
