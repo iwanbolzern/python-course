@@ -20,19 +20,19 @@ import time
 
 # # Get data
 
-positions = pd.read_csv("positions.csv")
-portfolios = pd.read_csv("portfolios.csv")
-instruments = pd.read_csv("instruments.csv")
+positions = pd.read_csv("../../../Data/positions.csv")
+portfolios = pd.read_csv("../../../Data/portfolios.csv")
+instruments = pd.read_csv("../../../Data/instruments.csv")
 
 # # preprocess data
 
 # remove portfolios with too few (less than 3) transactions
 counts = positions['PortfolioID'].value_counts()
-filtered_indices = counts[counts >= 2].index.tolist()
+filtered_indices = counts[counts >= 3].index.tolist()
 positions = positions[positions['PortfolioID'].isin(filtered_indices)]
 # remove investments owned by too few (less than 5) portfolios
 counts = positions['InstrumentID'].value_counts()
-filtered_indices = counts[counts >= 0].index.tolist()
+filtered_indices = counts[counts >= 5].index.tolist()
 positions = positions[positions['InstrumentID'].isin(filtered_indices)]
 
 # # build data to train on
@@ -79,28 +79,25 @@ y_train, y_test = y[0:int(len(user_item_rating_df) * 0.8)], y[int(len(user_item_
 # # Train model
 
 from scipy import sparse
-from sklearn.decomposition import nmf
+from sklearn.decomposition import NMF
 
 # get sparse representation
 X_sparse = sparse.csr_matrix((y_train, (X_train[:, 0], X_train[:, 1])),
                              shape=(len(portfolio_list),len(investment_list)))
-
-W, H, _ = nmf.non_negative_factorization(X=X_sparse,
-                                         W=None,
-                                         H=None,
-                                         n_components=3,
-                                         init='random',
-                                         update_H=True,
-                                         solver='cd',
-                                         beta_loss='frobenius',
-                                         max_iter=200,
-                                         tol=0.0001,
-                                         alpha=0,
-                                         l1_ratio=0,
-                                         regularization='both',
-                                         random_state=0,
-                                         verbose=0,
-                                         shuffle=False)
+model = NMF(
+    n_components=3,
+    init='random',
+    solver='cd',
+    beta_loss='frobenius',
+    max_iter=200,
+    tol=0.0001,
+    alpha=0,
+    l1_ratio=0,
+    random_state=0,
+    verbose=0,
+    shuffle=False)
+W = model.fit_transform(X_sparse)
+H = model.components_
 
 # # Test model
 
@@ -216,6 +213,8 @@ def compute_instrument_rating(instruments, ch_cl=False):
                         rating += RATING_EUR
                     elif instr_curr == CURRENCY_GBP:
                         rating += RATING_GBP
+                    elif instr_curr == CURRENCY_CHF:
+                        rating += RATING_CHF
                     else:
                         rating += RATING_DEFAULT
     else:
@@ -237,7 +236,7 @@ for potential_investor in potential_investors:
     current_investments = extended_positions.loc[extended_positions['PortfolioID']==potential_investor]
     # check rating
     rating = compute_instrument_rating(current_investments, is_swiss)
-    if is_swiss and rating<400:
+    if is_swiss and rating<500:
         print("Swiss client rating too low, no investment suggested")
     elif not is_swiss and rating>800:
         print("Non-Swiss client rating too high, no investment suggested")
