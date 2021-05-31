@@ -243,6 +243,7 @@ for potential_investor in potential_investors:
     else:
         y_pred = []
         for potential_investment in potential_investments:
+            dot_product = 0
             # only do the prediction if investment is valid
             if potential_investment not in current_investments.values:
                 if len(np.where(investment_list == potential_investment)[0]) > 0:
@@ -251,12 +252,12 @@ for potential_investor in potential_investors:
                     item = np.where(investment_list == potential_investment)[0].min()
                     # compute prediction
                     dot_product = W[user, :].dot(H[:, item])
-                    y_pred.append(dot_product)
-                    for i in range(len(y_pred)):
-                        if y_pred[i] > 0.01:
-                            y_pred[i] = 1
-                        else:
-                            y_pred[i] = 0
+            y_pred.append(dot_product)
+        for i in range(len(y_pred)):
+            if y_pred[i] >= 0.01:
+                y_pred[i] = 1
+            else:
+                y_pred[i] = 0
         suggested = [str(potential_investments[i]) for i in range(len(y_pred)) if y_pred[i]==1]
         print("Investments suggested for client " + str(potential_investor) + ":")
         print(", ".join(suggested))

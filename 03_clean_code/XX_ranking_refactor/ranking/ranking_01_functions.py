@@ -24,6 +24,7 @@ def suggest_investments(H, W, investment_list, portfolio_list, portfolios, exten
         else:
             y_pred = []
             for potential_investment in potential_investments:
+                dot_product = 0
                 # only do the prediction if investment is valid
                 if potential_investment not in current_investments.values:
                     if len(np.where(investment_list == potential_investment)[0]) > 0:
@@ -32,13 +33,13 @@ def suggest_investments(H, W, investment_list, portfolio_list, portfolios, exten
                         item = np.where(investment_list == potential_investment)[0].min()
                         # compute prediction
                         dot_product = W[user, :].dot(H[:, item])
-                        y_pred.append(dot_product)
-                        for i in range(len(y_pred)):
-
-                            if y_pred[i] > prediction_threshold:
-                                y_pred[i] = 1
-                            else:
-                                y_pred[i] = 0
+                        print(f"{user}-{item} score: {dot_product}")
+                y_pred.append(dot_product)
+            for i in range(len(y_pred)):
+                if y_pred[i] >= prediction_threshold:
+                    y_pred[i] = 1
+                else:
+                    y_pred[i] = 0
             result[str(potential_investor)] = [str(potential_investments[i]) for i in range(len(y_pred)) if
                                                y_pred[i] == 1]
     return result

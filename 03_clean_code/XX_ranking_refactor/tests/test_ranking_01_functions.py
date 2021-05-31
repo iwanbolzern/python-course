@@ -102,18 +102,16 @@ def test_compute_metrics():
 
 
 def test_suggest_investments():
-    # TODO: finish fake data
     W = np.array([
-        [1, 0, 2],
-        [1, 0, 0],
-        [0, 0, 2],
-        [1, 2, 1],
-        [0, 1, 0]
+        [2, 0],
+        [1, 0],
+        [1, 0],
+        [0, 2],
+        [0, 1]
     ])
     H = np.array([
-        [3, 0, 0, 1, 1, 1, 1],
-        [0, 2, 0, 1, 3, 0, 2],
-        [1, 0, 4, 1, 0, 2, 1],
+        [2, 2, 1, 3, 0, 0, 0],
+        [0, 0, 0, 0, 3, 1, 2]
     ])
     portfolio_list = np.array([1, 10, 11, 42, 69])
     investment_list = np.array([2, 4, 6, 8, 10, 12, 14])
@@ -122,23 +120,25 @@ def test_suggest_investments():
         'Currency': ['CHF', 'CHF', 'CHF', 'GBP', 'CHF']
     })
     extended_positions = pd.DataFrame({
-        'PortfolioID': [],
-        'InstrumentID': [],
-        'Currency': [],
-        'Ignore': [],
-        'Expired': []
+        'PortfolioID': [1, 1, 1, 10, 10, 11, 11, 42, 42, 42, 69, 69],
+        'InstrumentID': [2, 4, 6, 2, 8, 4, 8, 10, 12, 14, 10, 12],
+        'Currency': ['EUR'] * 12,
+        'Ignore': [False] * 12,
+        'Expired': [False] * 12
     })
     potential_investments = investment_list
     potential_investors = [1, 42, 69]
     min_swiss_rating = 10
     max_nonswiss_rating = 30
-    prediction_threshold = 3
+    prediction_threshold = 2
 
-    expected_result = {}
+    expected_result = {'1': ['8'], '42': [], '69': ['14']}
     computed_result = ranking.suggest_investments(H, W, investment_list, portfolio_list, portfolios, extended_positions,
                                                   potential_investments, potential_investors, min_swiss_rating,
                                                   max_nonswiss_rating, prediction_threshold)
-    pass
+    assert len(expected_result) == len(computed_result)
+    for investor in computed_result:
+        assert expected_result[investor] == computed_result[investor]
 
 
 def test_compute_instrument_rating():
