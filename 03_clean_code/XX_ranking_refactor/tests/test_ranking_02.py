@@ -55,8 +55,8 @@ def test_add_zeros():
         [4, 2],
     ])
     y_test = np.array([1, 1, 1, 1])
-    portfolio_list = [1, 2, 3, 4, 6]
-    investment_list = [1, 2, 4]
+    portfolio_list = np.array([1, 2, 3, 4, 6])
+    investment_list = np.array([1, 2, 4])
     computed_X_test, computed_y_test = ranking.add_zeros(X_test, X_train, investment_list, portfolio_list, y_test,
                                                          ratio=1.5)
     expected_y_test = np.array([1, 1, 1, 1, 0, 0])
@@ -95,7 +95,7 @@ def test_predict():
 
 def test_compute_metrics():
     y_pred = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0])
-    y_test = [1, 1, 1, 0, 0, 0, 0, 0, 1]
+    y_test = np.array([1, 1, 1, 0, 0, 0, 0, 0, 1])
     precision, recall = ranking.compute_metrics(y_pred, y_test)
     assert precision == 0.6
     assert recall == 0.75
@@ -148,5 +148,5 @@ def test_compute_instrument_rating():
         'Ignore': [False, False, False, True, False],
         'Expired': [False, False, False, False, True]
     })
-    assert ranking.compute_instrument_rating(instruments, ch_cl=False) == 50
-    assert ranking.compute_instrument_rating(instruments, ch_cl=True) == 20
+    assert ranking.compute_instrument_rating_for_non_swiss_clients(instruments) == 50
+    assert ranking.compute_instrument_rating_for_swiss_clients(instruments) == 20
