@@ -19,8 +19,9 @@ class CurrencyRating(Enum):
 
 
 def suggest_investments(H: np.ndarray, W: np.ndarray, unique_investments: np.ndarray, unique_portfolios: np.ndarray,
-                        portfolios: pd.DataFrame, extended_positions: pd.DataFrame, potential_investments,
-                        potential_investors, min_swiss_rating=500, max_nonswiss_rating=800, prediction_threshold=0.01):
+                        portfolios: pd.DataFrame, extended_positions: pd.DataFrame, potential_investments: list,
+                        potential_investors: list, min_swiss_rating: int = 500, max_nonswiss_rating: int = 800,
+                        prediction_threshold: float = 0.01):
     result = {}
     for potential_investor in potential_investors:
         current_investments = extended_positions.loc[extended_positions['PortfolioID'] == potential_investor]
@@ -46,11 +47,12 @@ def suggest_investments(H: np.ndarray, W: np.ndarray, unique_investments: np.nda
     return result
 
 
-def find_index(value, array):
+def find_index(value: int, array: np.ndarray):
     return np.where(array == value)[0].min()
 
 
-def check_valid_investment(current_investments, potential_investment, unique_investments):
+def check_valid_investment(current_investments: pd.DataFrame, potential_investment: int,
+                           unique_investments: np.ndarray):
     if potential_investment in current_investments.values:
         return False
     if len(np.where(unique_investments == potential_investment)[0]) == 0:
@@ -58,8 +60,8 @@ def check_valid_investment(current_investments, potential_investment, unique_inv
     return True
 
 
-def check_rating(potential_investor, portfolios, current_investments, max_nonswiss_rating,
-                 min_swiss_rating) -> bool:
+def check_rating(potential_investor: int, portfolios: pd.DataFrame, current_investments: pd.DataFrame,
+                 max_nonswiss_rating: int, min_swiss_rating: int) -> bool:
     is_swiss = portfolios.loc[portfolios['PortfolioID'] == potential_investor]['Currency'].values[0] == 'CHF'
     if is_swiss:
         rating = compute_instrument_rating_for_swiss_clients(current_investments)
@@ -132,7 +134,7 @@ def create_user_item_df(positions: pd.DataFrame):
     return unique_investments, unique_portfolios, user_item_rating_df
 
 
-def compute_unique_values_and_indices(column):
+def compute_unique_values_and_indices(column: pd.Series):
     unique_values = column.unique()
     indices_mapping = {portfolio: index for index, portfolio in enumerate(unique_values)}
     indices = column.map(indices_mapping)
@@ -223,7 +225,7 @@ if __name__ == '__main__':
 
     # # Prediction
     potential_investors = [42, 69, 420]
-    potential_investments = range(100, 150)
+    potential_investments = list(range(100, 150))
     extended_positions = pd.merge(positions, instruments, on='InstrumentID')
     result = suggest_investments(H, W, unique_investments, unique_portfolios, portfolios, extended_positions,
                                  potential_investments, potential_investors)

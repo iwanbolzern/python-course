@@ -24,18 +24,18 @@ def test_create_user_item_df():
         'InstrumentID': [1, 4, 1, 4, 1, 4, 1, 4, 1, 4],
         'Amount': [1, 1, 2, 2, 3, 3, 4, 4, 6, 6]
     })
-    expected_portfolio_list = [1, 2, 3, 4, 6]
-    expected_investment_list = [1, 4]
+    expected_unique_portfolios = [1, 2, 3, 4, 6]
+    expected_unique_investments = [1, 4]
     expected_user_item_rating_df = pd.DataFrame({
         'User': [0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
         'Item': [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
         'Rating': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     })
-    investment_list, portfolio_list, user_item_rating_df = ranking.create_user_item_df(positions)
+    unique_investments, unique_portfolios, user_item_rating_df = ranking.create_user_item_df(positions)
     user_item_rating_df = user_item_rating_df.sort_values(by=['User', 'Item']).reset_index(drop=True)
 
-    np.testing.assert_array_equal(investment_list, expected_investment_list)
-    np.testing.assert_array_equal(portfolio_list, expected_portfolio_list)
+    np.testing.assert_array_equal(unique_investments, expected_unique_investments)
+    np.testing.assert_array_equal(unique_portfolios, expected_unique_portfolios)
     pd.testing.assert_frame_equal(user_item_rating_df.reset_index(drop=True), expected_user_item_rating_df)
 
 
@@ -55,9 +55,9 @@ def test_add_zeros():
         [4, 2],
     ])
     y_test = np.array([1, 1, 1, 1])
-    portfolio_list = np.array([1, 2, 3, 4, 6])
-    investment_list = np.array([1, 2, 4])
-    computed_X_test, computed_y_test = ranking.add_zeros(X_test, X_train, investment_list, portfolio_list, y_test,
+    unique_portfolios = np.array([1, 2, 3, 4, 6])
+    unique_investments = np.array([1, 2, 4])
+    computed_X_test, computed_y_test = ranking.add_zeros(X_test, X_train, unique_investments, unique_portfolios, y_test,
                                                          ratio=1.5)
     expected_y_test = np.array([1, 1, 1, 1, 0, 0])
 
@@ -113,8 +113,8 @@ def test_suggest_investments():
         [2, 2, 1, 3, 0, 0, 0],
         [0, 0, 0, 0, 3, 1, 2]
     ])
-    portfolio_list = np.array([1, 10, 11, 42, 69])
-    investment_list = np.array([2, 4, 6, 8, 10, 12, 14])
+    unique_portfolios = np.array([1, 10, 11, 42, 69])
+    unique_investments = np.array([2, 4, 6, 8, 10, 12, 14])
     portfolios = pd.DataFrame({
         'PortfolioID': [1, 10, 11, 42, 69],
         'Currency': ['CHF', 'CHF', 'CHF', 'GBP', 'CHF']
@@ -126,14 +126,14 @@ def test_suggest_investments():
         'Ignore': [False] * 12,
         'Expired': [False] * 12
     })
-    potential_investments = investment_list
+    potential_investments = unique_investments.tolist()
     potential_investors = [1, 42, 69]
     min_swiss_rating = 10
     max_nonswiss_rating = 30
     prediction_threshold = 2
 
     expected_result = {'1': ['8'], '42': [], '69': ['14']}
-    computed_result = ranking.suggest_investments(H, W, investment_list, portfolio_list, portfolios, extended_positions,
+    computed_result = ranking.suggest_investments(H, W, unique_investments, unique_portfolios, portfolios, extended_positions,
                                                   potential_investments, potential_investors, min_swiss_rating,
                                                   max_nonswiss_rating, prediction_threshold)
     assert len(expected_result) == len(computed_result)
