@@ -1,11 +1,12 @@
-import pandas as pd
-import numpy as np
-import time
 import random
+import time
+from enum import Enum
+
+import numpy as np
+import pandas as pd
 from scipy import sparse
 from sklearn.decomposition import NMF
 from sklearn.metrics import confusion_matrix
-from enum import Enum
 
 
 class CurrencyRating(Enum):
