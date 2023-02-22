@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "03-poetry-first-steps"
+version = "0.1.0"
+description = ""
+authors = ["Iwan Bolzern <iwan.bolzern@roche.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+freegames = "^2.5.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
